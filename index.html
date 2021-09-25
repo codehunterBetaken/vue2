@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>vue title</title>
+  </head>
+  <body>
+    <div id="app">{{name}}</div>
+    <script src="dist/vue.js"></script>
+    <script>
+      let vm = new Vue({
+        el:'#app',
+        data: {
+          name: 'linkage',
+          a: {aa: 1}
+        }
+      })
+      // 对象已经被劫持，新加属性不触发重新劫持
+      //vm._data.a.b= 1 no
+      //vm._data.a = {...vm._data.a,b:1}
+      console.log(vm._data)
+    </script>
+  </body>
+</html>

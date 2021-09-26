@@ -16,6 +16,17 @@ export function initState(vm) {
   // }
    
 }
+
+function proxy(vm,source,key) {
+  Object.defineProperty(vm,key,{
+    get() {
+      return vm[source][key]
+    },
+    set(newValue) {
+      vm[source][key] = newValue
+    }
+  })
+}
 function initData(vm) {
   let data =vm.$options.data
   //vue2 data中数据使用数据劫持   
@@ -23,5 +34,8 @@ function initData(vm) {
   //vm和data没有关系，通过_data去关联
   data = vm._data = isFunction(data) ? data.call(vm) : data
 
+  for(let key in data) {
+    proxy(vm,'_data',key)
+  }
   observe(data)
 }

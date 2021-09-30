@@ -11,16 +11,22 @@
     <script>
       let vm = new Vue({
         el:'#app',
-        data: {
+        data() {return {
           name: 'linkage',
           a: {aa: 1},
-          b: [1,2,3]
-        }
+          b: [1,2,3],
+          c: [{a:1,b:2}]
+        }}
       })
+     
+      // vm.b.push(6)
+      // console.log(vm.b)
+      vm.c.push({c:3})
+     
       // 对象已经被劫持，新加属性不触发重新劫持
       //vm._data.a.b= 1 no
       //vm._data.a = {...vm._data.a,b:1}
-      console.log(vm.name)
+      // console.log(vm.name)
     </script>
   </body>
 </html>

@@ -8,21 +8,23 @@ const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // (.+)默认是贪婪匹配 (.+
 
 // html字符串解析成对应的脚本来触发
 function start(tagName,attributes) {
-    
+    console.log('start',tagName,attributes)
 }
 function end(tagName) {
-  
+  console.log('end',tagName)
 }
 
 function chars(text) {
-
+  console.log('chars',text)
 }
 
 function parserHTML(html) {
+  //删除处理过的部分
   function advance(len) {
     html = html.substring(len)
-    
   }
+
+  // 处理标签开始部分 标签名，标签属性
   function parseStartTag() {
     const start = html.match(startTagOpen)
     if(start) {
@@ -30,13 +32,18 @@ function parserHTML(html) {
         tagName : start[1],
         attrs: []
       }
-      advance(start[0].length)
+      advance(start[0].length) //start[1] dev start[0] <div
       let end
       let attr
+      // 非结尾符号>的参数 
       while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
-        console.log(end,attr)
+        match.attrs.push({name: attr[1],value: attr[3]||attr[4]||attr[5]})
         advance(attr[0].length)
       }
+      if(end) {
+        advance(end[0].length)
+      }
+      return match
     }
     return false
     }
@@ -45,15 +52,29 @@ function parserHTML(html) {
     let textEnd = html.indexOf('<')
     if(textEnd == 0) {
       const startTagMatch = parseStartTag()
-      break
-      // if(startTagMatch) {
+      if(startTagMatch) {
+        //解析出标签名，参数
+        start(startTagMatch.tagName,startTagMatch.attrs)
+        continue
+      }
 
-      // }
-      // const endTagMatch = parseEndTag()
+      //结束标签
+      const endTagMatch = html.match(endTag)
+      if(endTagMatch) {
+        end(endTagMatch[1])
+        advance(endTagMatch[0].length)
+        continue
+      }
+    }
 
-      // if(endTagMatch) {
-
-      // }
+    //开始标签与结束标签中间的内容
+    let text
+    if(textEnd >0) {
+      text = html.substring(0,textEnd)
+      if(text) {
+        chars(text)
+        advance(text.length)
+      }
     }
 
   }

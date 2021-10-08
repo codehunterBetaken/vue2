@@ -6,16 +6,49 @@ const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s
 const startTagClose = /^\s*(\/?)>/  //匹配标签的关闭 />
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // (.+)默认是贪婪匹配 (.+?)为惰性匹配
 
+function createAstElement(tagName,attrs) {
+  return {
+    tag: tagName,
+    type: 1,
+    children:[],
+    parent:null,
+    attrs
+  }
+}
+
+let root = null
+let stack = []
+
 // html字符串解析成对应的脚本来触发
 function start(tagName,attributes) {
-    console.log('start',tagName,attributes)
+    let parent = stack[stack.length -1]
+    let element = createAstElement(tagName,attributes)
+    if(!root) {
+      root = element
+    }
+    element.parent = parent
+    if(parent) { //细节，parent有可能没有
+      parent.children.push(element)
+    }
+    stack.push(element)
 }
 function end(tagName) {
-  console.log('end',tagName)
+  let last = stack.pop()
+  if(last.tag !== tagName) {
+     throw new Error("标签闭合有误")
+  }
+
 }
 
 function chars(text) {
-  console.log('chars',text)
+  text = text.replace(/\s/g,"")
+  let parent = stack[stack.length -1]
+  if(text) {
+    parent.children.push({
+      type: 3,
+      text
+    })
+  }
 }
 
 function parserHTML(html) {
@@ -81,9 +114,8 @@ function parserHTML(html) {
 }
 
 export function compileToFunction(template) {
-  console.log(template)
   
-
   parserHTML(template)
+  console.log(root)
   
 } 

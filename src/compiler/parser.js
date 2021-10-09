@@ -4,7 +4,7 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`) //匹配开始标签
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`) //结束标签 [^>]*
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/ //?: 为匹配且不保存
 const startTagClose = /^\s*(\/?)>/  //匹配标签的关闭 />
-const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // (.+)默认是贪婪匹配 (.+?)为惰性匹配
+
 
 function createAstElement(tagName,attrs) {
   return {

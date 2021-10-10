@@ -48,7 +48,6 @@ function defineReactive(data, key, value) {
   observe(value)
   Object.defineProperty(data, key, {
     get() {
-      console.log('get',data,key)
       return value
     },
     set(newV) {

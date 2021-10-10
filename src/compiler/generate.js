@@ -13,7 +13,7 @@ function genProps(attrs) {
     }
     str += `${attr.name}:${JSON.stringify(attr.value)},`
   }
-  return `${str.slice(0,-1)}`
+  return `{${str.slice(0,-1)}}`
 }
 
 function gen(el) {
@@ -27,6 +27,9 @@ function gen(el) {
       let tokens = []
       let match
       // defaultTagRE.lastIndex = 0 是一个细节 /g 带来的偏移量每次遇到新的文本时候需要归0
+      // 正则的lastIndex 属性用于规定下次匹配的起始位置。该属性只有设置标志 g 才能使用。
+      // 上次匹配的结果是由方法 RegExp.exec() 和 RegExp.test() 找到的，它们都以 lastIndex 属性所指的位置作为下次检索的起始点。
+      // 这样，就可以通过反复调用这两个方法来遍历一个字符串中的所有匹配文本。
       let lastIndex = defaultTagRE.lastIndex = 0 //css-loader 原理相同
       while (match = defaultTagRE.exec(text)) {
         let index = match.index

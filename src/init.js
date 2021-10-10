@@ -20,8 +20,8 @@ export function initMixin(Vue) {
     const vm = this
     const options = vm.$options
     el = document.querySelector(el)
-
-    console.log(el)
+    //用于虚拟dom替换时找到节点
+    vm.$el = el
     if(!options.render) { //没有render的情况下用template
         let template  = options.template
         if(!template && el) { //没有template的情况下，取el的内容作为模版

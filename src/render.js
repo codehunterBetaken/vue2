@@ -8,7 +8,11 @@ export function renderMixin(Vue) {
     return createTextElement(this,text)
   }
   Vue.prototype._s = function (val) {
-    return JSON.stringify(val)
+    if(typeof val == 'object') {
+      return JSON.stringify(val)
+    } else {
+      return val
+    }
   }
   Vue.prototype._render = function () {
     const vm = this

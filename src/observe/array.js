@@ -29,7 +29,6 @@ methods.forEach(method => {
             default:
                 break;
         }
-        console.log(method,inserted)
         if(inserted)  ob.observerArray(inserted)
     }
 })

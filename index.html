@@ -16,8 +16,10 @@
         </li>
       </ul>
     </div>
+    <!-- 此处为rollup.config.js里配置的 index.js最后处理完的输出 -->
     <script src="dist/vue.js"></script>
     <script>
+      // name 和 sex 为画面表示用 a，b，c为演示vue数据劫持用
       let vm = new Vue({
         data() {return {
           name: 'linkage',
@@ -30,6 +32,7 @@
      
       // vm.b.push(6)
       // console.log(vm.b)
+      //用来演示对虽然数组没有对每个元素进行劫持，数组里的对象还是有劫持的
       vm.c.push({c:3})
       vm.$mount('#app')
      

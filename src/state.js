@@ -3,7 +3,7 @@ import { isFunction } from "./utils"
 
 export function initState(vm) {
   const otps = vm.$options
-
+  //new vue 的时候如果传入了data
   if(otps.data) {
     initData(vm)
   }
@@ -16,7 +16,7 @@ export function initState(vm) {
   // }
    
 }
-
+// 对vm上的属性进行存取值通过代理改变_data上的值
 function proxy(vm,source,key) {
   Object.defineProperty(vm,key,{
     get() {
@@ -29,13 +29,16 @@ function proxy(vm,source,key) {
 }
 function initData(vm) {
   let data =vm.$options.data  //以$开头的不会做代理
-  //vue2 data中数据使用数据劫持   
-  //保证当前的this一直是vm所以使用call调用
-  //vm和data没有关系，通过_data去关联
+  // vue2 data中数据使用数据劫持   
+  // 保证当前的this一直是vm所以使用call调用
+  // **vm和data没有关系，通过_data去关联 **
   data = vm._data = isFunction(data) ? data.call(vm) : data
-
+  
+  // 把data里的所有数据都挂到了vm上，并代理到_data上
   for(let key in data) {
     proxy(vm,'_data',key)
   }
+
+  //对vm._data上所有数据进行劫持操作
   observe(data)
 }

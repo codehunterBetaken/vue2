@@ -8,7 +8,9 @@ import { mountComponent } from "./lifecycle";
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this
+    // options 为index.html里new Vue时候传入的参数 包括了data在initState会使用到
     vm.$options = options
+    //首先是对state数据的劫持处理
     initState(vm)
     if (vm.$options.el) {
       //将数据挂载到模版上
@@ -30,7 +32,6 @@ export function initMixin(Vue) {
           options.render = render
         }
     }
-    console.log(options.render)
         
     mountComponent(vm,el)//组件的挂载流程
   }

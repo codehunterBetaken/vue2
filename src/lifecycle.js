@@ -3,7 +3,6 @@ import { patch } from "./vdom/patch"
 export function lifecycleMixin(Vue) {
   Vue.prototype._update = function(vnode) {
     const vm = this
-    console.log(vnode)
     // 既有初始化，又有更新
     patch(vm.$el,vnode)
   }

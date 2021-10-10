@@ -6,7 +6,7 @@
     <title>vue title</title>
   </head>
   <body>
-    <div id="app" style="background-color: black;font: unset;">
+    <div id="app">
       <ul>
         <li>
           aa{{name}}bb
@@ -40,6 +40,9 @@
       //vm._data.a.b= 1 no
       //vm._data.a = {...vm._data.a,b:1}
       // console.log(vm.name)
+
+      vm.name = 'linstec'
+      vm._update(vm._render())
     </script>
   </body>
 </html>

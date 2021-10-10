@@ -13,7 +13,7 @@ export function patch(oldVnode, vnode) {
     // insertBefore 的写法是用来替换之前的节点
     parentElm.insertBefore(elm, oldVnode.nextSibling)
     parentElm.removeChild(oldVnode)
-
+    return elm
   }
 }
 

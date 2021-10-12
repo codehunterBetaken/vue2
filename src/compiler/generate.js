@@ -3,10 +3,11 @@ function genProps(attrs) {
     let str = ''
     for(let i=0; i< attrs.length; i++) {
         let attr = attrs[i]
+        //style的情况下需要特殊处理
         if(attr.name === 'style') {
             let styleObj = {}
             attr.value.replace(/([^:;]+)\:([^:;]+)/g,function() {
-                styleObj[arguments[1]] = arguments[2]
+               return styleObj[arguments[1]] = arguments[2]
             })
             attr.value = styleObj 
         }

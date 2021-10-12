@@ -1,7 +1,3 @@
-import {
-  createElement
-} from "."
-
 export function patch(oldVnode, vnode) {
   // 关于nodeType的解释 https://developer.mozilla.org/zh-CN/docs/Web/API/Node/nodeType
   if (oldVnode.nodeType == 1) { //1为真实节点

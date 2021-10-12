@@ -9,6 +9,7 @@ export function lifecycleMixin(Vue) {
   }
 }
 
+// 后续每个组件渲染的时候都会有一个watcher
 export function mountComponent(vm, el) {
   //更新函数 数据变化后再次调用
   let updateComponent = () => {
@@ -17,6 +18,7 @@ export function mountComponent(vm, el) {
     // 用虚拟dom生成真实dom
   }
   // updateComponent()
+  // 每个组件都会创建一个watcher
   new Watcher(vm,updateComponent,()=>{
     console.log('更新试图了')
   },true) //true 是一个渲染watcher

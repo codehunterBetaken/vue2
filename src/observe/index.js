@@ -2,6 +2,7 @@ import {
   isObject
 } from "../utils";
 import { arrayMethods } from "./array";
+import Dep from "./dep";
 
 //1.对对象的所有属性进行劫持
 //2.数组的情况对数组的方法进行劫持，对数组中是对象的项也进行劫持
@@ -46,13 +47,21 @@ class Observer {
 function defineReactive(data, key, value) {
   //value也可能是对象
   observe(value)
+  console.log(key)
+  let dep = new Dep() //每个属性都有一个dep属性
   Object.defineProperty(data, key, {
     get() {
+      if(Dep.target) {
+        dep.depend()
+      }
       return value
     },
     set(newV) {
-      observe(newV) //如果用户赋值一个新对象也需要对这个对象进行劫持
-      value = newV
+      if(newV !== value) {
+        observe(newV) //如果用户赋值一个新对象也需要对这个对象进行劫持
+        value = newV
+        dep.notify()
+      }
     }
   })
 }

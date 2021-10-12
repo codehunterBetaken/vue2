@@ -40,9 +40,12 @@
       //vm._data.a.b= 1 no
       //vm._data.a = {...vm._data.a,b:1}
       // console.log(vm.name)
+      setTimeout(() => {
+        vm.name = 'hello'
+        vm.name = '123'
+        // vm._update(vm._render())
+      }, 1000);
 
-      vm.name = 'linstec'
-      vm._update(vm._render())
     </script>
   </body>
 </html>

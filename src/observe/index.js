@@ -48,11 +48,10 @@ function defineReactive(data, key, value) {
   observe(value)
   Object.defineProperty(data, key, {
     get() {
-      console.log('get',data,key)
       return value
     },
     set(newV) {
-      observe(value) //如果用户赋值一个新对象也需要对这个对象进行劫持
+      observe(newV) //如果用户赋值一个新对象也需要对这个对象进行劫持
       value = newV
     }
   })

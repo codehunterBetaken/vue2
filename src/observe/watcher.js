@@ -9,11 +9,9 @@ class Watcher {
       this.options = options
       this.id = id++
 
-
       this.getter = exprOrFn
       this.deps = []
       this.depsId = new Set()
-
       this.get()
        
   } 
@@ -21,7 +19,6 @@ class Watcher {
     // 属性和watcher之间是多对多的关系
     pushTarget(this)
     this.getter()
-    console.log('ok')
     popTarget()
   }
   update() {

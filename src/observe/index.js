@@ -47,7 +47,6 @@ class Observer {
 function defineReactive(data, key, value) {
   //value也可能是对象
   observe(value)
-  console.log(key)
   let dep = new Dep() //每个属性都有一个dep属性
   Object.defineProperty(data, key, {
     get() {

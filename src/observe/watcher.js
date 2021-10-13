@@ -1,4 +1,5 @@
 import { popTarget, pushTarget } from "./dep"
+import { queueWatcher } from "./scheduler"
 
 let id = 0
 class Watcher {
@@ -21,7 +22,12 @@ class Watcher {
     this.getter()
     popTarget()
   }
-  update() {
+  update() { //vue中的更新是异步的
+    // this.get()
+    queueWatcher(this) //多次调用update，我希望先将watcher缓存
+  }
+  run() {
+    //后继会有新的类型的watcher
     this.get()
   }
 

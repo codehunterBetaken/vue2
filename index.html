@@ -43,6 +43,9 @@
       setTimeout(() => {
         vm.name = 'hello'
         vm.name = '123'
+        vm.$nextTick(() => {
+          console.log(vm.$el)
+        })
         // vm._update(vm._render())
       }, 1000);
 

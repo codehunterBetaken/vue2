@@ -7,10 +7,14 @@ import Dep from "./dep";
 //1.对对象的所有属性进行劫持
 //2.数组的情况对数组的方法进行劫持，对数组中是对象的项也进行劫持
 
+// 如果给对象新增一个属性，不会触发视图更新。（给对象本身增加一个dep，dep中存watcher，如果增加一个属性，手动触发watcher的更新）
+
+
 
 //检测数据变化   类有类型 可以知道是谁的实例，对象没有
 class Observer {
   constructor(data) { //对对象内的所有属性进行劫持
+    this.dep = new Dep()
     // 把this带到数组劫持里使用，所有被劫持的属性都添加了 __ob__
     //构造函数的this指的是当前对象的实例
     //data.__ob__ =this  //由于__ob__也是一个对象，被遍历会死循环
@@ -43,15 +47,35 @@ class Observer {
     })
   }
 }
+
+function dependArray(value) {
+    for(let i = 0; i < value.length; i++) {
+        let current  = value[i]
+        current.__ob__ && current.__ob__.dep.depend()
+        if(Array.isArray(current)){
+          dependArray(current)
+        }
+    }
+}
+
 //vue2 会对对象进行遍历，将每个属性 用defineProperty 重新定义 性能差
 function defineReactive(data, key, value) {
   //value也可能是对象
   observe(value)
   let dep = new Dep() //每个属性都有一个dep属性
+
+  let childOb = observe(value)
+   
   Object.defineProperty(data, key, {
     get() {
       if(Dep.target) {
         dep.depend()
+        if(childOb) { // 数组或者对象，对象在$set的时候也会用到
+          childOb.dep.depend()
+          if(Array.isArray(value)) {
+            dependArray(value)
+          }
+        }
       }
       return value
     },
@@ -70,7 +94,7 @@ export function observe(data) {
   }
   //无需重复观测
   if(data.__ob__) {
-    return
+    return data.__ob__
   }
   return new Observer(data)
 }

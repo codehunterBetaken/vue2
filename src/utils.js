@@ -15,6 +15,7 @@ function flushCallbacks() {
 }
 let waiting = false
 function timer(flushCallbacks) {
+  // 初始化
   let timerFn = () => {}
 
   //微任务是在dom渲染前执行的，此处用到的vm.$el是内存内的，并不与dom渲染是否完毕有关

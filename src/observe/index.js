@@ -68,6 +68,7 @@ function defineReactive(data, key, value) {
    
   Object.defineProperty(data, key, {
     get() {
+      // get调用时，在调用它的watcher里加入当前dep
       if(Dep.target) {
         dep.depend()
         if(childOb) { // 数组或者对象，对象在$set的时候也会用到
@@ -83,7 +84,7 @@ function defineReactive(data, key, value) {
       if(newV !== value) {
         observe(newV) //如果用户赋值一个新对象也需要对这个对象进行劫持
         value = newV
-        dep.notify()
+        dep.notify()  //对于这个值的watcher都进行更新
       }
     }
   })

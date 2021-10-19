@@ -18,7 +18,7 @@ export function initState(vm) {
   // if(otps.computed) {
   //   initComputed()
   // }
-
+  //对所有的watcher进行绑定
   if(otps.watch) {
     initWatch(vm,otps.watch)
   }
@@ -66,5 +66,5 @@ function initWatch(vm, watch) {
 }
 
 function createWatcher(vm,key,handler) {
-  new vm.$watch(key,handler)
+  vm.$watch(key,handler)
 }

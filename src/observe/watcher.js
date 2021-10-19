@@ -17,6 +17,7 @@ class Watcher {
     this.id = id++
 
     if (typeof exprOrFn == 'string') {
+      console.log(this)
       this.getter = function () {
         // 数据取值时，进行依赖收集
         // return vm[exprOrFn]

@@ -5,6 +5,7 @@ let has = {}
 
 function flushSchedulerQueue(params) {
   for(let i =0; i< queue.length; i++) {
+    // 执行视图的更新
     queue[i].run()
   }
   queue = []
@@ -22,7 +23,7 @@ export function queueWatcher(watcher) {
     has[id] = true
     if(!panding) {
       // setTimeout(flushSchedulerQueue, 0);
-      nextTick(flushSchedulerQueue);
+      nextTick(flushSchedulerQueue)
       panding = true
     }
   }

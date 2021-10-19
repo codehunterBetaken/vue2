@@ -52,6 +52,8 @@ function timer(flushCallbacks) {
 
 // waiting 用于当前tick未执行完的阻塞，比如$nextTick的调用
 // 会在数据更新的set调用的nextTick(flushSchedulerQueue)之后
+// 在主线程上，如果再遇到macrotask，就把它放到macrotask任务队列末尾，由于一次event loop只能取一个macrotask，
+// 所以遇到的宏任务就需要等待其它轮次的事件循环了；如果遇到microtask，则放到本次循环的microtask队列中去。
 export function nextTick(cb) {
   callbacks.push(cb)
   if (!waiting) {

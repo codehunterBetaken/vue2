@@ -31,7 +31,7 @@ class Watcher {
     this.get()
   }
 
-  // 可以在传进来的dip上添加此watcher
+  // 可以在传进来的dep上添加此watcher
   addDep(dep) {
      let id = dep.id
      if(!this.depsId.has(id)) {

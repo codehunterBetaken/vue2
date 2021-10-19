@@ -23,7 +23,7 @@ function timer(flushCallbacks) {
   //microtasks: Promise， process.nextTick， Object.observe， MutationObserver
   //1.先执行 macrotasks：I/O -> UI渲染 ->requestAnimationFrame
   //2.再执行 microtasks ：process.nextTick -> Promise -> MutationObserver -> Object.observe
-  //3.再把setTimeout setInterval setImmediate【三个货不讨喜】 塞入一个新的macrotasks，依次：setTimeout ，setInterval --》setImmediate
+  //3.再把setTimeout setInterval setImmediate【三个货不讨喜】 塞入一个新的macrotasks，依次：setTimeout ，setInterval -->setImmediate
 
   if (Promise) {
     timerFn = () => {
@@ -50,7 +50,8 @@ function timer(flushCallbacks) {
   timerFn()
 }
 
-
+// waiting 用于当前tick未执行完的阻塞，比如$nextTick的调用
+// 会在数据更新的set调用的nextTick(flushSchedulerQueue)之后
 export function nextTick(cb) {
   callbacks.push(cb)
   if (!waiting) {

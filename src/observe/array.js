@@ -29,6 +29,7 @@ methods.forEach(method => {
             default:
                 break;
         }
+        // 对新数组里的对象添加劫持
         if(inserted)  ob.observerArray(inserted)
         // 数组的observer.dep属性
         ob.dep.notify()

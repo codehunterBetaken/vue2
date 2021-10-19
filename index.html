@@ -29,9 +29,25 @@
           b: [1,2,3],
           c: [{a:1,b:2}],
           d: [[4,5,6]]
-        }}
+        }
+      },
+      watch: {
+        name(newVal,oldVal) {
+          console.log(newVal,oldVal)
+        },
+        sex: [
+          function(newVal,oldVal) {
+            console.log(newVal,oldVal)
+          },
+          function(newVal,oldVal) {
+            console.log(newVal,oldVal)
+          }
+        ]
+      }
       })
-     
+      vm.$watch('name', function(newValue) {
+        console.log(newValue)
+      })
       // vm.b.push(6)
       // console.log(vm.b)
       //用来演示对虽然数组没有对每个元素进行劫持，数组里的对象还是有劫持的

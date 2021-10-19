@@ -1,5 +1,13 @@
 import { observe } from "./observe/index"  //需要添加插件node_resolve_plugin 才能去找默认的index
+import Watcher from "./observe/watcher"
 import { isFunction } from "./utils"
+
+export function stateMixin(Vue) {
+   Vue.prototype.$watch = function(key, handler, options = {}) {
+     options.user = true
+      new Watcher(this,key,handler,options)
+   }
+}
 
 export function initState(vm) {
   const otps = vm.$options
@@ -11,9 +19,9 @@ export function initState(vm) {
   //   initComputed()
   // }
 
-  // if(otps.watch) {
-  //   initWatch()
-  // }
+  if(otps.watch) {
+    initWatch(vm,otps.watch)
+  }
    
 }
 // 对vm上的属性进行存取值通过代理改变_data上的值
@@ -41,4 +49,22 @@ function initData(vm) {
 
   //对vm._data上所有数据进行劫持操作
   observe(data)
+}
+
+function initWatch(vm, watch) {
+  for(let key in watch) {
+    let handler = watch[key]
+    if(Array.isArray(handler)) {
+        for(let i=0;i<handler.length; i++) {
+          createWatcher(vm,key,handler[i])
+        } 
+    } else {
+      createWatcher(vm,key,handler)
+    }
+
+  }
+}
+
+function createWatcher(vm,key,handler) {
+  new vm.$watch(key,handler)
 }

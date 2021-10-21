@@ -12,12 +12,12 @@ class Watcher {
     this.vm = vm
     this.exprOrFn = exprOrFn
     this.user = !!options.user //判断是否是用户watcher  ！！用来转布尔型
+    this.lazy = !!options.lazy // computed属性第一次不需要执行
     this.cb = cb
     this.options = options
     this.id = id++
 
     if (typeof exprOrFn == 'string') {
-      console.log(this)
       this.getter = function () {
         // 数据取值时，进行依赖收集
         // return vm[exprOrFn]
@@ -34,7 +34,7 @@ class Watcher {
 
     this.deps = []
     this.depsId = new Set()
-    this.value = this.get() // 第一次的value
+    this.value = this.lazy? undefined: this.get() // 第一次的value
 
   }
   get() {

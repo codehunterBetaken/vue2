@@ -14,6 +14,9 @@
         <li>
           {{sex}}
         </li>
+        <li>
+          {{fullName}}
+        </li>
       </ul>
     </div>
     <!-- 此处为rollup.config.js里配置的 index.js最后处理完的输出 -->
@@ -43,6 +46,17 @@
             console.log(newVal,oldVal)
           }
         ]
+      },
+      computed: {
+        fullName: {
+          get() {
+            console.log('ooo')
+            return this.name + this.sex
+          },
+          set(newValue) {
+            console.log(newValue)
+          }
+        }
       }
       })
       vm.$watch('name', function(newValue) {

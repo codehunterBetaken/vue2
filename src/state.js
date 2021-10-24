@@ -73,15 +73,26 @@ function createWatcher(vm,key,handler) {
 }
 
 function initComputed(vm,computed) {
+  const watchers = vm._computedWatchers = []
   for(let key in computed) {
     const userDef = computed[key]
     let getter = typeof userDef == 'function' ? userDef : userDef.get
     // 每个计算属性本质就是watcher
-    new Watcher(vm,getter,()=>{},{lazy: true}) //默认不执行
+    watchers[key] = new Watcher(vm,getter,()=>{},{lazy: true}) //默认不执行
     //把key定义到vm上
     defineComputed(vm,key,userDef)
 
   }
+}
+
+function createComputedGetter(key) {
+    return function computedGetter() {
+     let watcher = vm._computedWatchers[key]
+     if(watcher.dirty) {
+       watcher.evaluate();
+     }
+     return watcher.value
+    }
 }
 
 function defineComputed(vm,key,userDef) {
@@ -89,7 +100,7 @@ function defineComputed(vm,key,userDef) {
   if(typeof userDef == 'function') {
     sharedProperty.get = userDef
   } else {
-    sharedProperty.get = userDef.get
+    sharedProperty.get = createComputedGetter(key)
     sharedProperty.set = userDef.set
   }
   Object.defineProperty(vm,key,sharedProperty)

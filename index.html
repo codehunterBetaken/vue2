@@ -50,7 +50,7 @@
       computed: {
         fullName: {
           get() {
-            console.log('ooo')
+            console.log('ooo',this)
             return this.name + this.sex
           },
           set(newValue) {
@@ -65,24 +65,31 @@
       // vm.b.push(6)
       // console.log(vm.b)
       //用来演示对虽然数组没有对每个元素进行劫持，数组里的对象还是有劫持的
-      vm.c.push({c:3})
+      // vm.c.push({c:3})
       vm.$mount('#app')
      
       // 对象已经被劫持，新加属性不触发重新劫持
       //vm._data.a.b= 1 no
       //vm._data.a = {...vm._data.a,b:1}
       // console.log(vm.name)
-      setTimeout(() => {
-        vm.name = 'hello'
-        vm.name = '123'
-        vm.$nextTick(() => {
-          console.log(vm.$el)
-        })
-        // vm._update(vm._render())
-      }, 1000);
+
+      // 用来演示 nexttick在多次赋值后的情况
+      // setTimeout(() => {
+      //   vm.name = 'hello'
+      //   vm.name = '123'
+      //   vm.$nextTick(() => {
+      //     console.log(vm.$el)
+      //   })
+      //   // vm._update(vm._render())
+      // }, 1000);
       // 数组的observer.dep属性执行notify方法
-      vm.b.push(6)
-      vm.d[0].push(888)
+      // vm.b.push(6)
+      // vm.d[0].push(888)
+
+      // 用于演示计算属性的dirty的用法
+      console.log(vm.fullName)
+      console.log(vm.fullName)
+      
     </script>
   </body>
 </html>

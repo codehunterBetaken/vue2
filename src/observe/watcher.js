@@ -13,6 +13,7 @@ class Watcher {
     this.exprOrFn = exprOrFn
     this.user = !!options.user //判断是否是用户watcher  ！！用来转布尔型
     this.lazy = !!options.lazy // computed属性第一次不需要执行
+    this.dirty = options.lazy
     this.cb = cb
     this.options = options
     this.id = id++
@@ -40,7 +41,9 @@ class Watcher {
   get() {
     // 属性和watcher之间是多对多的关系
     pushTarget(this)
-    const value = this.getter()
+    // 注意此处的this如果不加call(this.vm)的话this指向的是watcher本身，
+    // 在执行的computed里的this就会指向错误找不到挂在vm上的其他变量
+    const value = this.getter.call(this.vm)
     popTarget()
     return value
   }
@@ -68,6 +71,12 @@ class Watcher {
       dep.addSub(this)
     }
   }
+
+  evaluate() {
+    this.dirty = false
+    this.value = this.get()
+  }
+
 }
 
 export default Watcher

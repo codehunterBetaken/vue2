@@ -49,7 +49,12 @@ class Watcher {
   }
   update() { //vue中的更新是异步的
     // this.get()
-    queueWatcher(this) //多次调用update，我希望先将watcher缓存
+    if(this.lazy) {
+      this.dirty = true
+    } else {
+      queueWatcher(this) //多次调用update，我希望先将watcher缓存
+    }
+   
   }
   run() {
     //后继会有新的类型的watcher
@@ -60,6 +65,13 @@ class Watcher {
       this.cb.call(this.vm,newValue,oldValue)
     }
 
+  }
+
+  depend() {
+    let i = this.deps.length
+    while (i--) {
+      this.deps[i].depend()
+    }
   }
 
   // 可以在传进来的dep上添加此watcher

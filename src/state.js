@@ -1,3 +1,4 @@
+import Dep from "./observe/dep"
 import { observe } from "./observe/index"  //需要添加插件node_resolve_plugin 才能去找默认的index
 import Watcher from "./observe/watcher"
 import { isFunction } from "./utils"
@@ -90,6 +91,9 @@ function createComputedGetter(key) {
      let watcher = vm._computedWatchers[key]
      if(watcher.dirty) {
        watcher.evaluate();
+     }
+     if(Dep.target) {
+      watcher.depend()
      }
      return watcher.value
     }

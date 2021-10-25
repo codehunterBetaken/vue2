@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>vue title</title>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li>
+          aa{{name}}bb {{b}} {{d}}
+        </li>
+        <li>
+          {{sex}}
+        </li>
+      </ul>
+    </div>
+    <!-- 此处为rollup.config.js里配置的 index.js最后处理完的输出 -->
+    <script src="dist/vue.js"></script>
+    <script>
+      // name 和 sex 为画面表示用 a，b，c为演示vue数据劫持用
+      // d用于 数组的更新复杂情况
+      let vm = new Vue({
+        data() {return {
+          name: 'linkage',
+          sex: 'mail',
+          a: {aa: 1},
+          b: [1,2,3],
+          c: [{a:1,b:2}],
+          d: [[4,5,6]]
+        }
+      },
+      watch: {
+        name(newVal,oldVal) {
+          console.log(newVal,oldVal)
+        },
+        sex: [
+          function(newVal,oldVal) {
+            console.log(newVal,oldVal)
+          },
+          function(newVal,oldVal) {
+            console.log(newVal,oldVal)
+          }
+        ]
+      }
+      })
+      vm.$watch('name', function(newValue) {
+        console.log(newValue)
+      })
+      // vm.b.push(6)
+      // console.log(vm.b)
+      //用来演示对虽然数组没有对每个元素进行劫持，数组里的对象还是有劫持的
+      // vm.c.push({c:3})
+      vm.$mount('#app')
+     
+      // 对象已经被劫持，新加属性不触发重新劫持
+      //vm._data.a.b= 1 no
+      //vm._data.a = {...vm._data.a,b:1}
+      // console.log(vm.name)
+
+      // 用来演示 nexttick在多次赋值后的情况
+      // setTimeout(() => {
+      //   vm.name = 'hello'
+      //   vm.name = '123'
+      //   vm.$nextTick(() => {
+      //     console.log(vm.$el)
+      //   })
+      //   // vm._update(vm._render())
+      // }, 1000);
+      // 数组的observer.dep属性执行notify方法
+      // vm.b.push(6)
+      // vm.d[0].push(888)
+
+      // 用于演示计算属性的dirty的用法
+      console.log(vm.fullName)
+      console.log(vm.fullName)
+      vm.name = 'new'
+
+    </script>
+  </body>
+</html>

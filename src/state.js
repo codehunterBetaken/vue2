@@ -17,6 +17,8 @@ export function initState(vm) {
   if(otps.data) {
     initData(vm)
   }
+
+  // 对所有计算属性进行初始化
   if(otps.computed) {
     initComputed(vm,otps.computed)
   }
@@ -86,24 +88,31 @@ function initComputed(vm,computed) {
   }
 }
 
+
 function createComputedGetter(key) {
     return function computedGetter() {
      let watcher = vm._computedWatchers[key]
-     if(watcher.dirty) {
-       watcher.evaluate();
+     if(watcher.dirty) {  // 如果dirty为true
+       watcher.evaluate(); // 计算出新值，并将dirty 更新为false
      }
-     if(Dep.target) {
-      watcher.depend()
+     // 如果取完值以后还有Dep.target说明还有上层的watcher 此处是指的渲染watcher
+     // 前置操作参见 dep.popTarget
+     if(Dep.target) { 
+       // 计算属性内有 两个dep name 和sex ，这两个dep也要对计算属性进行依赖收集
+      watcher.depend() 
      }
+      // 如果依赖的值不发生变化，则返回上次计算的结果
      return watcher.value
     }
 }
 
 function defineComputed(vm,key,userDef) {
   let sharedProperty = {}
+  // 单纯只有get的情况
   if(typeof userDef == 'function') {
-    sharedProperty.get = userDef
+    sharedProperty.get = createComputedGetter(key)
   } else {
+  // 同时定义了get，set的情况
     sharedProperty.get = createComputedGetter(key)
     sharedProperty.set = userDef.set
   }

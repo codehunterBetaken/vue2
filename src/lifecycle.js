@@ -21,6 +21,7 @@ export function mountComponent(vm, el) {
   }
   // updateComponent()
   // 每个组件都会创建一个watcher
+  console.log("new 组件的渲染watcher")
   new Watcher(vm,updateComponent,()=>{
     console.log('更新试图了')
   },true) //true 是一个渲染watcher

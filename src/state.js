@@ -7,6 +7,7 @@ export function stateMixin(Vue) {
    Vue.prototype.$watch = function(key, handler, options = {}) {
      // 仅是一个用户watcher的标识位
      options.user = true
+     console.log('new y用户自定义watcher')
       new Watcher(this,key,handler,options)
    }
 }
@@ -19,6 +20,7 @@ export function initState(vm) {
   }
 
   // 对所有计算属性进行初始化
+  // 好文推荐 https://juejin.cn/post/6974293549135167495#heading-24
   if(otps.computed) {
     initComputed(vm,otps.computed)
   }
@@ -75,12 +77,14 @@ function createWatcher(vm,key,handler) {
   return vm.$watch(key,handler)
 }
 
+// 初始化computed
 function initComputed(vm,computed) {
   const watchers = vm._computedWatchers = []
   for(let key in computed) {
     const userDef = computed[key]
     let getter = typeof userDef == 'function' ? userDef : userDef.get
     // 每个计算属性本质就是watcher
+    console.log('new 计算属性watcher')
     watchers[key] = new Watcher(vm,getter,()=>{},{lazy: true}) //默认不执行
     //把key定义到vm上
     defineComputed(vm,key,userDef)
@@ -91,12 +95,15 @@ function initComputed(vm,computed) {
 
 function createComputedGetter(key) {
     return function computedGetter() {
+      console.log('computedGetter',key)
      let watcher = vm._computedWatchers[key]
+     console.log('dirty',watcher.dirty)
      if(watcher.dirty) {  // 如果dirty为true
        watcher.evaluate(); // 计算出新值，并将dirty 更新为false
      }
      // 如果取完值以后还有Dep.target说明还有上层的watcher 此处是指的渲染watcher
      // 前置操作参见 dep.popTarget
+     console.log('上层watcher id',Dep.target.id)
      if(Dep.target) { 
        // 计算属性内有 两个dep name 和sex ，这两个dep也要对计算属性进行依赖收集
       watcher.depend() 

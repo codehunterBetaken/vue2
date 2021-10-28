@@ -26,7 +26,7 @@
       computed: {
         fullName: {
           get() {
-            console.log('ooo',this)
+            console.log('computed value get')
             return this.name + this.sex
           },
           set(newValue) {
@@ -41,6 +41,7 @@
       // 用于演示计算属性的dirty的用法
       // console.log(vm.fullName)
       // console.log(vm.fullName)
+      console.log('=================================================')
       vm.name = 'new'
 
     </script>

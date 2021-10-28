@@ -63,13 +63,16 @@ function defineReactive(data, key, value) {
   //value也可能是对象
   observe(value)
   let dep = new Dep() //每个属性都有一个dep属性
+  console.log('new dep key:',key,'id:',dep.id)
 
   let childOb = observe(value)
    
   Object.defineProperty(data, key, {
     get() {
       // get调用时，在调用它的watcher里加入当前dep
+      console.log('get key:',key)
       if(Dep.target) {
+        console.log('Dep.target watcher id:',Dep.target.id)
         dep.depend()
         if(childOb) { // 数组或者对象，对象在$set的时候也会用到
           childOb.dep.depend()

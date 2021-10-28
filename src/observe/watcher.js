@@ -19,6 +19,7 @@ class Watcher {
     this.id = id++
 
     if (typeof exprOrFn == 'string') {
+      //data依赖收集走此处
       this.getter = function () {
         // 数据取值时，进行依赖收集
         // return vm[exprOrFn]
@@ -30,12 +31,14 @@ class Watcher {
         return obj
       }
     } else {
+      //watch依赖走此处
       this.getter = exprOrFn
     }
 
     this.deps = []
     this.depsId = new Set()
-    this.value = this.lazy? undefined: this.get() // 第一次的value
+    console.log('new watcher,lazy:',this.lazy,'watcher id:' + this.id)
+    this.value = this.lazy ? undefined : this.get() // 第一次的value
 
   }
   get() {
@@ -49,24 +52,25 @@ class Watcher {
   }
   update() { //vue中的更新是异步的
     // this.get()
-    if(this.lazy) {
+    if (this.lazy) {
+      console.log('watcher-update,watcher id:',this.id)
       this.dirty = true
     } else {
       queueWatcher(this) //多次调用update，我希望先将watcher缓存
     }
-   
+
   }
+  //更新视图
   run() {
-    //后继会有新的类型的watcher
     let newValue = this.get()
     let oldValue = this.value
     this.value = newValue
-    if(this.user) {
-      this.cb.call(this.vm,newValue,oldValue)
+    if (this.user) {
+      this.cb.call(this.vm, newValue, oldValue)
     }
 
   }
-
+  //收集依赖
   depend() {
     let i = this.deps.length
     while (i--) {
@@ -79,14 +83,20 @@ class Watcher {
     let id = dep.id
     if (!this.depsId.has(id)) {
       this.depsId.add(id)
+      console.log('watcher id:',this.id,'deps里添加: diepid:',dep.id)
       this.deps.push(dep)
+      // 同样在dep里把当前的watcher收集起来
+      console.log('depid' ,dep.id,'add watcher id:',this.id)
       dep.addSub(this)
     }
   }
 
+  //案例中 当data.name值发生变化时会执行此方法
   evaluate() {
+    console.log('evaluate start')
     this.dirty = false
     this.value = this.get()
+    console.log('evaluate end value:',this.value)
   }
 
 }

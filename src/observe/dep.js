@@ -34,14 +34,12 @@ let stack = []
 export function pushTarget(watcher) {
   Dep.target = watcher
   stack.push(watcher)
-  console.log('--pushTarget--,watcherid:',watcher.id,'stackLength',stack.length)
 }
 
 export function popTarget() {
   let consoleValue = stack.pop()
   
   Dep.target = stack[stack.length-1]
-  console.log('---popTarget---','popWatcherid:',consoleValue.id,'now depTarget:',Dep.target && Dep.target.id)
 }
 
 export default Dep

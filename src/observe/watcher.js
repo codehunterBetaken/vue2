@@ -37,7 +37,6 @@ class Watcher {
 
     this.deps = []
     this.depsId = new Set()
-    console.log('new watcher,lazy:',this.lazy,'watcher id:' + this.id)
     this.value = this.lazy ? undefined : this.get() // 第一次的value
 
   }
@@ -53,7 +52,6 @@ class Watcher {
   update() { //vue中的更新是异步的
     // this.get()
     if (this.lazy) {
-      console.log('watcher-update,watcher id:',this.id)
       this.dirty = true
     } else {
       queueWatcher(this) //多次调用update，我希望先将watcher缓存
@@ -82,23 +80,18 @@ class Watcher {
   addDep(dep) {
     let id = dep.id
     // 判断此watcher里是否已经有要加的dep，如果有相比双方已经加好友互相关注了
-    console.log('dep.id:',id,'想与watcher id:',this.id,'互加关注')
     if (!this.depsId.has(id)) {
       this.depsId.add(id)
-      console.log('watcher id:',this.id,'deps里添加: diepid:',dep.id)
       this.deps.push(dep)
       // 同样在dep里把当前的watcher收集起来
-      console.log('depid' ,dep.id,'add watcher id:',this.id)
       dep.addSub(this)
     }
   }
 
   //案例中 当data.name值发生变化时会执行此方法
   evaluate() {
-    console.log('evaluate start')
     this.dirty = false
     this.value = this.get()
-    console.log('evaluate end value:',this.value)
   }
 
 }

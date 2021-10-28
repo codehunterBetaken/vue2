@@ -14,7 +14,6 @@ let methods = [
 methods.forEach(method => {
     arrayMethods[method] = function(...args) {
         let ob =this.__ob__ //根据当前数组获取observer实例
-        console.log('数组方法被调用')
         oldArrayPrototype[method].call(this,...args)
         let inserted
         switch (method) {

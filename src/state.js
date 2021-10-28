@@ -7,7 +7,7 @@ export function stateMixin(Vue) {
    Vue.prototype.$watch = function(key, handler, options = {}) {
      // 仅是一个用户watcher的标识位
      options.user = true
-     console.log('new y用户自定义watcher')
+     console.log('new 用户自定义watcher')
       new Watcher(this,key,handler,options)
    }
 }

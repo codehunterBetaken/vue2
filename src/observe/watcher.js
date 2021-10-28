@@ -81,6 +81,8 @@ class Watcher {
   // 可以在传进来的dep上添加此watcher
   addDep(dep) {
     let id = dep.id
+    // 判断此watcher里是否已经有要加的dep，如果有相比双方已经加好友互相关注了
+    console.log('dep.id:',id,'想与watcher id:',this.id,'互加关注')
     if (!this.depsId.has(id)) {
       this.depsId.add(id)
       console.log('watcher id:',this.id,'deps里添加: diepid:',dep.id)

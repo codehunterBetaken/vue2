@@ -1,0 +1,3 @@
+export function initGlobalApi(Vue) {
+  
+}

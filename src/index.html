@@ -12,8 +12,22 @@
   </div>
   <script src="dist/vue.js"></script>
   <script>
-    let vm = new Vue({
+    Vue.mixin({
+      beforeCreate() {
+        console.log('beforeCreate1')
+      }
+    })
 
+    Vue.mixin({
+      beforeCreate() {
+        console.log('beforeCreate2')
+      }
+    })
+
+    let vm = new Vue({
+      beforeCreate() {
+        console.log('beforeCreate')
+      }
     })
 
     vm.$mount('#app')

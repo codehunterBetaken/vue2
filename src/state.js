@@ -1,5 +1,5 @@
 import Dep from "./observe/dep"
-import { observe } from "./observe/index"  //需要添加插件node_resolve_plugin 才能去找默认的index
+import { observe } from "./observe" 
 import Watcher from "./observe/watcher"
 import { isFunction } from "./utils"
 

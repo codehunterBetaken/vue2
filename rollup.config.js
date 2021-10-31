@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'; //需要添加插件node_resolve_plugin 才能去找默认的index
 export default {
   input: './src/index.js',
   output: {
@@ -10,7 +11,8 @@ export default {
   plugins: [
     babel({
       exclude: 'node_modules/**',
-    })
+    }),
+    resolve()
 
   ]
 }

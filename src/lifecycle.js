@@ -13,15 +13,26 @@ export function lifecycleMixin(Vue) {
 
 // 后续每个组件渲染的时候都会有一个watcher
 export function mountComponent(vm, el) {
+
   //更新函数 数据变化后再次调用
   let updateComponent = () => {
     //调用render函数，生成虚拟dom
     vm._update(vm._render())
     // 用虚拟dom生成真实dom
   }
+  callHook(vm,'beforeMount')
   // updateComponent()
   // 每个组件都会创建一个watcher
   new Watcher(vm,updateComponent,()=>{
     console.log('更新试图了')
   },true) //true 是一个渲染watcher
+}
+
+export function callHook(vm, hook) {
+  let handlers = vm.$options[hook]
+  if(handlers) {
+    for(let i= 0; i<handlers.length; i++) {
+      handlers[i].call(vm)
+    }
+  }
 }

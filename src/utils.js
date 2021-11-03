@@ -77,7 +77,7 @@ let strats = {}
 
 function mergeHook(parentVal,childVal) {
   if(childVal) {
-    if(childVal) {
+    if(parentVal) {
         return parentVal.concat(childVal)
     } else {
       return [childVal]
@@ -116,4 +116,5 @@ export function mergeOptions(parent, child) {
         }
       }
     }
+    return options
 }

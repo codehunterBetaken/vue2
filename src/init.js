@@ -3,15 +3,18 @@ import {
 } from "./state"
 
 import { compileToFunction} from "./compiler";
-import { mountComponent } from "./lifecycle";
+import { callHook, mountComponent } from "./lifecycle";
+import { mergeOptions } from "./utils";
 
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this
     // options 为index.html里new Vue时候传入的参数 包括了data在initState会使用到
-    vm.$options = options
+    vm.$options = mergeOptions(vm.constructor.options,options)  // TODO this.constructor.options出于可能会有自组件的情况，需要复习一下this的相关知识
+    callHook(vm,'beforeCreate')
     //首先是对state数据的劫持处理
     initState(vm)
+    callHook(vm,'created')
     if (vm.$options.el) {
       //将数据挂载到模版上
       vm.$mount(vm.$options.el)

@@ -12,25 +12,20 @@
   </div>
   <script src="../dist/vue.js"></script>
   <script>
-    Vue.mixin({
-      beforeCreate() {
-        console.log('beforeCreate1')
-      }
-    })
-
-    Vue.mixin({  
-      beforeCreate() {
-        console.log('beforeCreate2')
-      }
-    })
+    Vue.component("my-button",{
+          template: '<button>hello</button>'
+        })
+    
     // new Vue 中调用了_init 这时候才把此处的beforeCreate合并到options里, 先全局合并后组件初始化的时候本组件的合并
     let vm = new Vue({
-      beforeCreate() {
-        console.log('beforeCreate3')
+      el:"#app",
+      components: {
+        "my-button": {
+          template: '<button>word</button>'
+        }
       }
     })
 
-    vm.$mount('#app')
   </script>
 </body>
 

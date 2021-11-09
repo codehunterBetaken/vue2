@@ -11,6 +11,7 @@ export function initMixin(Vue) {
     const vm = this
     // options 为index.html里new Vue时候传入的参数 包括了data在initState会使用到
     vm.$options = mergeOptions(vm.constructor.options,options)  // TODO this.constructor.options出于可能会有自组件的情况，需要复习一下this的相关知识
+    console.log(vm.$options)
     callHook(vm,'beforeCreate')
     //首先是对state数据的劫持处理
     initState(vm)

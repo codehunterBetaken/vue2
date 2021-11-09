@@ -91,6 +91,16 @@ lifeCycleHooks.forEach(hook => {
   strats[hook] = mergeHook
 })
 
+strats.components = function(parentVal,childVal) {
+  let options = Object.create(parentVal) // 根据父对象构造一个新对象options.__proto__
+  if(childVal) {
+     for(let key in childVal) {
+       options[key] = childVal[key] 
+     }
+  }
+  return options
+}
+
 export function mergeOptions(parent, child) {
     const options = {}
     for(let key in parent) {

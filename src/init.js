@@ -11,7 +11,6 @@ export function initMixin(Vue) {
     const vm = this
     // options 为index.html里new Vue时候传入的参数 包括了data在initState会使用到
     vm.$options = mergeOptions(vm.constructor.options,options)  // TODO this.constructor.options出于可能会有自组件的情况，需要复习一下this的相关知识
-    console.log(vm.$options)
     callHook(vm,'beforeCreate')
     //首先是对state数据的劫持处理
     initState(vm)
@@ -22,6 +21,11 @@ export function initMixin(Vue) {
 
     }
   }
+  // 注意是走完子组件的生命周期再走完父组件的
+  // beforeCreate parent
+  // beforeCreate child
+  // mounted child
+  // mounted parent
   Vue.prototype.$mount = function (el) {
     const vm = this
     const options = vm.$options
@@ -32,9 +36,9 @@ export function initMixin(Vue) {
         let template  = options.template
         if(!template && el) { //没有template的情况下，取el的内容作为模版
           template = el.outerHTML
-          let render = compileToFunction(template)
-          options.render = render
         }
+        let render = compileToFunction(template)
+        options.render = render
     }
         
     mountComponent(vm,el)//组件的挂载流程

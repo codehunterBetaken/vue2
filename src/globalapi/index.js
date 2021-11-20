@@ -17,14 +17,13 @@ export function initGlobalApi(Vue) {
 
     definition = this.options._base.extend(definition)
     this.options.components[id] = definition
-    console.log(this.options.components)
   }
 
   // 返回一个继承类
   Vue.extend = function (opts) {
     const Super = this
-    const Sub = function VueComponent() {
-      this._init()
+    const Sub = function VueComponent(options) {
+      this._init(options)
     }
     Sub.prototype = Object.create(Super.prototype)
     Sub.prototype.constructor = Sub

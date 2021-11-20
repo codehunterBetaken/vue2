@@ -1,4 +1,7 @@
 export function patch(oldVnode, vnode) {
+  if(!oldVnode) {
+     return createElm(vnode) // 如果没有el元素，那就直接根据虚拟节点直接生成真实节点返回
+  }
   // 关于nodeType的解释 https://developer.mozilla.org/zh-CN/docs/Web/API/Node/nodeType
   if (oldVnode.nodeType == 1) { //1为真实节点
     const parentElm = oldVnode.parentNode //找到父节点便于删除当前真实dom
@@ -13,9 +16,24 @@ export function patch(oldVnode, vnode) {
   }
 }
 
+function createComponent(vnode) {
+  //有hook方法说明是组件
+  let i = vnode.data
+  if((i = i.hook) && (i = i.init)) {
+    i(vnode)
+  }
+  if(vnode.componentInstance) {
+    return true
+  }
+}
+
 function  createElm(vnode) {
   let {tag,data,children,text,vm} = vnode
-  if(typeof tag === 'string') { //元素
+  if(typeof tag === 'string') { //元素 组件
+    if(createComponent(vnode)) {
+      return vnode.componentInstance.$el
+    }
+     
     vnode.el = document.createElement(tag) //在虚拟节点上挂一个el属性为真实节点
     children.forEach(child => {
       vnode.el.appendChild(createElm(child))

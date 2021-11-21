@@ -116,9 +116,13 @@ export function mergeOptions(parent, child) {
     function  mergeField(key) {
       let parentVal = parent[key]
       let childVal = child[key]
+      // ✨✨✨此处使用策略模式 key为lifeCycleHooks中的以及strats.components
+      // 他们共同点都是传入parentVal,childVal两个参数
       if(strats[key]) {
+        //对一些生命周期的合并
         options[key] = strats[key](parentVal,childVal)
       } else {
+        //对一些参数的合并
         if(isObject(parentVal) && isObject(childVal)) {
           options[key] = {...parentVal,...childVal}
         } else {
@@ -129,6 +133,7 @@ export function mergeOptions(parent, child) {
     return options
 }
 
+// 判断是否是组件
 export function isReservedTag(str) {
      let reservedTag = 'a,div,span,p,img,button,ul,li'
     return reservedTag.includes(str)

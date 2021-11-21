@@ -31,6 +31,7 @@ export function mountComponent(vm, el) {
 }
 
 export function callHook(vm, hook) {
+  //在初始化的传入的options里可能有相同的hook被合并，所以这里是一个数组
   let handlers = vm.$options[hook]
   if(handlers) {
     for(let i= 0; i<handlers.length; i++) {

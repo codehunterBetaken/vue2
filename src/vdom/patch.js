@@ -22,6 +22,7 @@ function createComponent(vnode) {
   if((i = i.hook) && (i = i.init)) {
     i(vnode)
   }
+  //说明是个组件
   if(vnode.componentInstance) {
     return true
   }
@@ -30,6 +31,7 @@ function createComponent(vnode) {
 function  createElm(vnode) {
   let {tag,data,children,text,vm} = vnode
   if(typeof tag === 'string') { //元素 组件
+    //组件分支
     if(createComponent(vnode)) {
       return vnode.componentInstance.$el
     }

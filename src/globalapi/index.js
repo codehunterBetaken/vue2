@@ -17,7 +17,7 @@ export function initGlobalApi(Vue) {
   Vue.component = function (id,definition) {
     // 保证组件的隔离
     definition = this.options._base.extend(definition)
-    // 在options的components里存入组件
+    // 在options的components里注册组件，如果有后继无需重新注册
     this.options.components[id] = definition
   }
 

@@ -16,7 +16,7 @@
     Vue.component("my-button",{
           template: '<button>hello</button>'
         })
-    
+    // 组件初始化相关文章 https://juejin.cn/post/6844903856103489544
     // new Vue 中调用了_init 这时候才把此处的beforeCreate合并到options里, 先全局合并后组件初始化的时候本组件的合并
     let vm = new Vue({
       el:"#app",

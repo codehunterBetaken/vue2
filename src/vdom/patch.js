@@ -20,6 +20,7 @@ function createComponent(vnode) {
   //有hook方法说明是组件
   let i = vnode.data
   if((i = i.hook) && (i = i.init)) {
+    // 执行组件的data.hook.init方法 对组件进行挂载
     i(vnode)
   }
   //说明是个组件

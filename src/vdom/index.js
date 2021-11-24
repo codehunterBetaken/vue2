@@ -14,6 +14,7 @@ export function createElement(vm, tag, data = {}, ...children) { //data可能没
 
 function createComponent(vm,tag,data,key,solt,Ctor) {
   
+  // 如果选项的值是对象，则该组件是局部注册的组件，此时在创建子Vnode时会调用 父类的extend方法去创建一个子类构造器。
   if(isObject(Ctor)) {
     // vm.$options._base 就是Vue
     Ctor = vm.$options._base.extend(Ctor)

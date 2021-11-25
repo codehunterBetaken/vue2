@@ -16,4 +16,11 @@ stateMixin(Vue)
 //扩展类
 initGlobalApi(Vue)
 
+import {compileToFunction} from './compiler'
+//diff核心
+let oldTemplate = `<div>{{message}}</div>`
+let vm1 = new Vue({data:{message: 'hello world'}})
+const render1 = compileToFunction(oldTemplate)
+let newTemplate = `<p>pTemplate</p>`
+
 export default Vue

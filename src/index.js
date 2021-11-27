@@ -17,10 +17,23 @@ stateMixin(Vue)
 initGlobalApi(Vue)
 
 import {compileToFunction} from './compiler'
+import { createElm, patch } from "./vdom/patch"
 //diff核心
-let oldTemplate = `<div>{{message}}</div>`
+let oldTemplate = `<div style="color:red;background:black" a="1">{{message}}</div>`
 let vm1 = new Vue({data:{message: 'hello world'}})
 const render1 = compileToFunction(oldTemplate)
-let newTemplate = `<p>pTemplate</p>`
+const oldVnode = render1.call(vm1)
+document.body.appendChild(createElm(oldVnode))
+
+
+// let newTemplate = `<p>{{message}}</p>`
+let newTemplate = `<div style="color:blue" b="2"></div>`
+let vm2 = new Vue({data:{message: 'zf'}})
+const render2 = compileToFunction(newTemplate)
+const newVnode = render2.call(vm2)
+setTimeout(()=> {
+  patch(oldVnode,newVnode)
+},2000)
+
 
 export default Vue

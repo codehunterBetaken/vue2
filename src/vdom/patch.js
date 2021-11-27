@@ -13,6 +13,62 @@ export function patch(oldVnode, vnode) {
     parentElm.insertBefore(elm, oldVnode.nextSibling)
     parentElm.removeChild(oldVnode)
     return elm
+  } else {
+    if(oldVnode.tag !== vnode.tag) {
+      return oldVnode.el.parentNode.replaceChild(createElm(vnode),oldVnode.el)
+    }
+    let el = vnode.el = oldVnode.el
+    if(vnode.tag == undefined) { //新老都是文本
+      if(oldVnode.text !== vnode.text) {
+        el.textContent = vnode.text
+      }
+      return
+    }
+    patchProps(vnode,oldVnode.data)
+    let oldChildren = oldVnode.children || []
+    let newChildren = vnode.children || []
+    if(oldChildren.length > 0 && newChildren.length >0) {
+
+    } else if(newChildren.length > 0) {
+      for(let i=0; i< newChildren.length; i++) {
+        let child = createElm(newChildren[i])
+        el.appendChild(child)
+      }
+    } else if(oldChildren.length >0) {
+        el.innerHTML = ``
+    }else {
+
+    }
+  }
+}
+
+function patchProps(vnode,oldProps={}) {
+  let newProps = vnode.data || {}
+  let el = vnode.el
+
+  let newStyle = newProps.style || {}
+  let oldStyle = oldProps.style || {}
+  for(let key in oldStyle) {
+    if(!newStyle[key]) {
+      el.style[key] = ''
+    }
+  }
+
+  for(let key in oldProps) {
+    if(!newProps[key]) {
+      el.removeAttribute(key)
+    }
+  }
+  for(let key in newProps) {
+    // style 需要特殊处理
+    if(key === 'style') {
+      for(let styleName in newProps.style) {
+        el.style[styleName] = newProps.style[styleName]
+      }
+    } else {
+      el.setAttribute(key,newProps[key])
+    }
+    
   }
 }
 
@@ -29,7 +85,7 @@ function createComponent(vnode) {
   }
 }
 
-function  createElm(vnode) {
+export function  createElm(vnode) {
   let {tag,data,children,text,vm} = vnode
   if(typeof tag === 'string') { //元素 组件
     //组件分支
@@ -38,6 +94,7 @@ function  createElm(vnode) {
     }
      
     vnode.el = document.createElement(tag) //在虚拟节点上挂一个el属性为真实节点
+    patchProps(vnode)
     children.forEach(child => {
       vnode.el.appendChild(createElm(child))
     })

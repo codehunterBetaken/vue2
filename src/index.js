@@ -34,9 +34,9 @@ document.body.appendChild(createElm(oldVnode))
 
 // let newTemplate = `<p>{{message}}</p>`
 let newTemplate = `<div>
-    <li key="B">B</li>
-    <li key="C">C</li>
     <li key="D">D</li>
+    <li key="C">C</li>
+    <li key="B">B</li>
     <li key="A">A</li>
     
 </div>`

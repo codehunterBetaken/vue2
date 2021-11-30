@@ -66,6 +66,7 @@ function patchChildren(el, oldChildren, newChildren) {
       oldEndVnode = oldChildren[--oldEndIndex]
       newEndVnode = newChildren[--newEndIndex]
     } else if(isSameVnode(oldStartVnode,newEndVnode)) {
+      console.log(oldEndVnode.el,oldEndVnode.el.nextSibling)
       patch(oldStartVnode,newEndVnode)
       el.insertBefore(oldStartVnode.el,oldEndVnode.el.nextSibling) // 移动后老元素会被销毁
       oldStartVnode = oldChildren[++oldStartIndex]
@@ -75,6 +76,8 @@ function patchChildren(el, oldChildren, newChildren) {
       el.insertBefore(oldEndVnode.el,oldStartVnode.el) // 移动后老元素会被销毁
       oldEndVnode = oldChildren[--oldEndIndex]
       newStartVnode = newChildren[++newStartIndex]
+    } else {  // 1.需要根据key喝对应的索引讲老的内容生成映射表
+
     }
   }
   if (newStartIndex <= newEndIndex) {

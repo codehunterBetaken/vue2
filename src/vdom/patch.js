@@ -56,6 +56,19 @@ function patchChildren(el, oldChildren, newChildren) {
   let newStartVnode = newChildren[0]
   let newEndIndex = newChildren.length - 1
   let newEndVnode = newChildren[newEndIndex]
+
+  const makeIndexByKey = (children) => {
+      return children.reduce((memo,current,index) => {
+        if(current.key) {
+          memo[current.key] = index
+        }
+       
+        return memo
+      },{})
+  }
+
+  const keysMap = makeIndexByKey(oldChildren)
+
   while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
     if (isSameVnode(oldStartVnode, newStartVnode)) {
       patch(oldStartVnode, newStartVnode)
@@ -66,7 +79,6 @@ function patchChildren(el, oldChildren, newChildren) {
       oldEndVnode = oldChildren[--oldEndIndex]
       newEndVnode = newChildren[--newEndIndex]
     } else if(isSameVnode(oldStartVnode,newEndVnode)) {
-      console.log(oldEndVnode.el,oldEndVnode.el.nextSibling)
       patch(oldStartVnode,newEndVnode)
       el.insertBefore(oldStartVnode.el,oldEndVnode.el.nextSibling) // 移动后老元素会被销毁
       oldStartVnode = oldChildren[++oldStartIndex]
@@ -77,7 +89,13 @@ function patchChildren(el, oldChildren, newChildren) {
       oldEndVnode = oldChildren[--oldEndIndex]
       newStartVnode = newChildren[++newStartIndex]
     } else {  // 1.需要根据key喝对应的索引讲老的内容生成映射表
-
+      let moveIndex = keysMap[newStartVnode.key]
+      if(moveIndex == undefined) {
+        el.insertBefore(createElm(newStartVnode),oldStartVnode.el)
+      } else {
+          let moveNode = oldChildren[moveIndex]
+          el.insertBefore(moveNode.el,oldStartVnode.el)
+      }
     }
   }
   if (newStartIndex <= newEndIndex) {

@@ -62,7 +62,6 @@ function patchChildren(el, oldChildren, newChildren) {
         if(current.key) {
           memo[current.key] = index
         }
-       
         return memo
       },{})
   }
@@ -70,6 +69,11 @@ function patchChildren(el, oldChildren, newChildren) {
   const keysMap = makeIndexByKey(oldChildren)
 
   while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+    if(!oldStartVnode) {
+      oldStartVnode = oldChildren[++oldStartIndex]
+    } else if(!oldEndVnode) {
+      oldEndVnode = oldChildren[--oldEndIndex]
+    }
     if (isSameVnode(oldStartVnode, newStartVnode)) {
       patch(oldStartVnode, newStartVnode)
       oldStartVnode = oldChildren[++oldStartIndex]
@@ -94,8 +98,11 @@ function patchChildren(el, oldChildren, newChildren) {
         el.insertBefore(createElm(newStartVnode),oldStartVnode.el)
       } else {
           let moveNode = oldChildren[moveIndex]
+          oldChildren[moveIndex] = null //被移动走的地方防止塌陷，补上null，保持索引的正确性
           el.insertBefore(moveNode.el,oldStartVnode.el)
+          patch(moveNode,newStartVnode)
       }
+      newStartVnode = newChildren[++newStartIndex]
     }
   }
   if (newStartIndex <= newEndIndex) {
@@ -110,7 +117,9 @@ function patchChildren(el, oldChildren, newChildren) {
 
   if(oldStartIndex <= oldEndIndex) {
     for (let i = oldStartIndex; i <= oldEndIndex; i++) {
-      el.removeChild(oldChildren[i].el)
+      if(oldChildren[i] !== null) {
+        el.removeChild(oldChildren[i].el)
+      }
     }
   }
 }

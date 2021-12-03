@@ -16,7 +16,7 @@ stateMixin(Vue)
 //扩展类
 initGlobalApi(Vue)
 
-import {compileToFunction} from './compiler'
+/**  import {compileToFunction} from './compiler'
 import { createElm, patch } from "./vdom/patch"
 //diff核心
 // let oldTemplate = `<div style="color:red;background:black" a="1">{{message}}</div>`
@@ -45,7 +45,7 @@ const render2 = compileToFunction(newTemplate)
 const newVnode = render2.call(vm2)
 setTimeout(()=> {
   patch(oldVnode,newVnode)
-},2000)
+},2000) */
 
 
 export default Vue

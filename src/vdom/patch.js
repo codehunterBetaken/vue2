@@ -36,9 +36,9 @@ export function patch(oldVnode, vnode) {
       }
     } else if (oldChildren.length > 0) {
       el.innerHTML = ``
-    } else {
+    } 
+    return el;
 
-    }
   }
 }
 

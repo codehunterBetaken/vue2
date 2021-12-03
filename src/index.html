@@ -9,18 +9,19 @@
 
 <body>
   <div id="app">
+    <li>{{msg}}</li>
   </div>
   <script src="../dist/vue.js"></script>
   <script>
-    // let vm = new Vue({
-    //   el:'#app',
-    //   data: {
-    //     msg:'hello'
-    //   }
-    // })
-    // setTimeout(() => {
-    //   vm.msg = 'zf'
-    // },1000)
+    let vm = new Vue({
+      el:'#app',
+      data: {
+        msg:'hello'
+      }
+    })
+    setTimeout(() => {
+      vm.msg = 'zf'
+    },4000)
   </script>
 </body>
 

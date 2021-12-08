@@ -4,6 +4,8 @@ let queue = []
 let has = {}
 
 function flushSchedulerQueue(params) {
+  debugger
+  queue.sort((a,b)=> a.id - b.id)
   for(let i =0; i< queue.length; i++) {
     // 执行视图的更新
     queue[i].run()
